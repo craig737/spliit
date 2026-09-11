@@ -11,12 +11,28 @@ import { getAnalyticsConfig } from '@/lib/analytics/config'
 import { effectiveBaseUrl } from '@/lib/env'
 import { TRPCProvider } from '@/trpc/client'
 import type { Metadata, Viewport } from 'next'
+import { Archivo, Spectral } from 'next/font/google'
 import { NextIntlClientProvider, useTranslations } from 'next-intl'
 import { getLocale, getMessages, getTranslations } from 'next-intl/server'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import './globals.css'
+
+// IHA type system (see iha.klinkhoff.art): Archivo for UI, Spectral for prose.
+const archivo = Archivo({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-archivo',
+  display: 'swap',
+})
+const spectral = Spectral({
+  subsets: ['latin'],
+  weight: ['200', '300'],
+  style: ['normal', 'italic'],
+  variable: '--font-spectral',
+  display: 'swap',
+})
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('Homepage')
@@ -47,9 +63,9 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     appleWebApp: {
       capable: true,
-      title: 'Spliit',
+      title: 'IHA Split',
     },
-    applicationName: 'Spliit',
+    applicationName: 'IHA Split',
     icons: [
       {
         url: '/android-chrome-192x192.png',
@@ -66,26 +82,33 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#047857',
+  themeColor: '#0A0B0C',
 }
 
 function Content({ children }: { children: React.ReactNode }) {
   const t = useTranslations()
   return (
     <TRPCProvider>
-      <header className="fixed top-0 left-0 right-0 h-16 flex justify-between bg-white dark:bg-gray-950 bg-opacity-50 dark:bg-opacity-50 p-2 border-b backdrop-blur-sm z-50">
+      <header className="fixed top-0 left-0 right-0 h-16 flex justify-between bg-background/70 p-2 border-b backdrop-blur-sm z-50">
         <Link
-          className="flex items-center gap-2 hover:scale-105 transition-transform"
+          className="flex items-center gap-3 px-2 hover:text-primary transition-colors"
           href="/"
         >
-          <h1>
-            <Image
-              src="/logo-with-text.png"
-              className="m-1 h-auto w-auto"
-              width={(35 * 522) / 180}
-              height={35}
-              alt="Spliit"
-            />
+          <Image
+            src="/logo/64x64.png"
+            className="h-9 w-9"
+            width={36}
+            height={36}
+            alt=""
+            priority
+            unoptimized
+          />
+          <h1 className="iha-wordmark">
+            <span className="hidden sm:inline">
+              International Hockey Association
+            </span>
+            <span className="sm:hidden">IHA</span>
+            <span className="text-primary"> · Split</span>
           </h1>
         </Link>
         <div role="navigation" aria-label="Menu" className="flex">
@@ -115,14 +138,19 @@ function Content({ children }: { children: React.ReactNode }) {
       <footer className="sm:p-8 md:p-16 sm:mt-16 sm:text-sm md:text-base md:mt-32 bg-slate-50 dark:bg-card border-t p-6 mt-8 flex flex-col sm:flex-row sm:justify-between gap-4 text-xs [&_a]:underline">
         <div className="flex flex-col space-y-2">
           <div className="sm:text-lg font-semibold text-base flex space-x-2 items-center">
-            <Link className="flex items-center gap-2" href="/">
+            <Link className="flex items-center gap-3 !no-underline" href="/">
               <Image
-                src="/logo-with-text.png"
-                className="m-1 h-auto w-auto"
-                width={(35 * 522) / 180}
-                height={35}
-                alt="Spliit"
+                src="/logo/64x64.png"
+                className="h-9 w-9"
+                width={36}
+                height={36}
+                alt=""
+                unoptimized
               />
+              <span className="iha-wordmark">
+                International Hockey Association
+                <span className="text-primary"> · Split</span>
+              </span>
             </Link>
           </div>
           <div className="flex flex-col space-y a--no-underline-text-white">
@@ -167,8 +195,10 @@ export default async function RootLayout({
       dir={['ar', 'he'].includes(locale) ? 'rtl' : 'ltr'}
       suppressHydrationWarning
     >
-      <ApplePwaSplash icon="/logo-with-text.png" color="#047857" />
-      <body className="min-h-[100dvh] flex flex-col items-stretch bg-slate-50 bg-opacity-30 dark:bg-background">
+      <ApplePwaSplash icon="/logo/512x512.png" color="#0A0B0C" />
+      <body
+        className={`${archivo.variable} ${spectral.variable} min-h-[100dvh] flex flex-col items-stretch bg-background`}
+      >
         <NextIntlClientProvider messages={messages}>
           {/* Rendered inside the provider because it reads translations via
               `useTranslations`, which needs NextIntlClientProvider in its
@@ -177,7 +207,7 @@ export default async function RootLayout({
           <Analytics config={analyticsConfig}>
             <ThemeProvider
               attribute="class"
-              defaultTheme="system"
+              defaultTheme="dark"
               enableSystem
               disableTransitionOnChange
             >
