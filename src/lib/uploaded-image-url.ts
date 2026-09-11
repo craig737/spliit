@@ -7,6 +7,13 @@ import { env } from './env'
  */
 function getAllowedUploadHosts(): string[] {
   const hosts: string[] = []
+  if (env.NEXT_PUBLIC_S3_PUBLIC_URL) {
+    try {
+      hosts.push(new URL(env.NEXT_PUBLIC_S3_PUBLIC_URL).hostname)
+    } catch {
+      // ignore
+    }
+  }
   if (env.S3_UPLOAD_ENDPOINT) {
     // custom endpoint for providers other than AWS
     try {

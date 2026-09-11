@@ -66,6 +66,10 @@ const envSchema = z
     S3_UPLOAD_BUCKET: z.string().optional(),
     S3_UPLOAD_REGION: z.string().optional(),
     S3_UPLOAD_ENDPOINT: z.string().optional(),
+    // IHA fork: public base URL files are served from, when it differs from
+    // the S3 API endpoint (e.g. an R2 custom domain). Build-time on purpose:
+    // the browser needs it to compose the stored URL.
+    NEXT_PUBLIC_S3_PUBLIC_URL: z.string().url().optional(),
     NEXT_PUBLIC_ENABLE_RECEIPT_EXTRACT: z.preprocess(
       interpretEnvVarAsBool,
       z.boolean().default(false),

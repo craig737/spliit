@@ -8,10 +8,19 @@ const withNextIntl = createNextIntlPlugin()
  */
 const remotePatterns = []
 
+// Public file host, when it differs from the S3 endpoint (IHA fork)
+if (process.env.NEXT_PUBLIC_S3_PUBLIC_URL) {
+  try {
+    remotePatterns.push({
+      hostname: new URL(process.env.NEXT_PUBLIC_S3_PUBLIC_URL).hostname,
+    })
+  } catch {}
+}
+
 // S3 Storage
 if (process.env.S3_UPLOAD_ENDPOINT) {
   // custom endpoint for providers other than AWS
-  const url = new URL(process.env.S3_UPLOAD_ENDPOINT);
+  const url = new URL(process.env.S3_UPLOAD_ENDPOINT)
   remotePatterns.push({
     hostname: url.hostname,
   })
@@ -31,7 +40,7 @@ const nextConfig = {
   // standalone output is requested (missing next-server.js.nft.json).
   ...(process.env.VERCEL ? {} : { output: 'standalone' }),
   images: {
-    remotePatterns
+    remotePatterns,
   },
   reactCompiler: true,
   // Required to run in a codespace (see https://github.com/vercel/next.js/issues/58019)

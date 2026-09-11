@@ -27,6 +27,7 @@ import { ToastAction } from '@/components/ui/toast'
 import { useToast } from '@/components/ui/use-toast'
 import { useAnalytics } from '@/lib/analytics/context'
 import { useMediaQuery } from '@/lib/hooks'
+import { toPublicUploadUrl } from '@/lib/public-upload-url'
 import {
   formatCurrency,
   formatDate,
@@ -117,6 +118,7 @@ function ReceiptDialogContent() {
         setPending(true)
         console.log('Uploading image…')
         let { url } = await uploadToS3(file)
+        url = toPublicUploadUrl(url)
         console.log('Extracting information from receipt…')
         const { amount, categoryId, date, title } =
           await extractExpenseInformationFromImage(url)
