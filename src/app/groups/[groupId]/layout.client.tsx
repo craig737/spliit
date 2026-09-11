@@ -3,6 +3,7 @@
 import { useToast } from '@/components/ui/use-toast'
 import { trpc } from '@/trpc/client'
 import { useTranslations } from 'next-intl'
+import { usePathname } from 'next/navigation'
 import { PropsWithChildren, useEffect } from 'react'
 import { CurrentGroupProvider } from './current-group-context'
 import { GroupHeader } from './group-header'
@@ -15,6 +16,10 @@ export function GroupLayoutClient({
   const { data, isLoading } = trpc.groups.get.useQuery({ groupId })
   const t = useTranslations('Groups.NotFound')
   const { toast } = useToast()
+  // IHA fork: the quick-add sheet stands on its own, without the group header.
+  const header = usePathname().endsWith('/expenses/new') ? null : (
+    <GroupHeader />
+  )
 
   useEffect(() => {
     if (data && !data.group) {
@@ -33,7 +38,7 @@ export function GroupLayoutClient({
   if (isLoading) {
     return (
       <CurrentGroupProvider {...props}>
-        <GroupHeader />
+        {header}
         {children}
       </CurrentGroupProvider>
     )
@@ -41,7 +46,7 @@ export function GroupLayoutClient({
 
   return (
     <CurrentGroupProvider {...props}>
-      <GroupHeader />
+      {header}
       {children}
       <SaveGroupLocally />
     </CurrentGroupProvider>
