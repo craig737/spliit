@@ -148,7 +148,7 @@ export function SettleForm({
       })
 
   return (
-    <div className="mx-auto flex min-h-[calc(100dvh-4rem)] w-full max-w-md flex-col px-4">
+    <div className="mx-auto flex w-full max-w-md flex-col px-4 pb-6">
       {/* Top bar */}
       <div className="flex items-center justify-between py-3">
         <Button asChild variant="ghost" size="icon" aria-label="Cancel">
@@ -168,7 +168,7 @@ export function SettleForm({
         </Button>
       </div>
 
-      <div className="flex flex-1 flex-col items-center justify-center gap-8 py-10 text-center">
+      <div className="flex flex-col items-center gap-8 py-6 text-center">
         {/* Who paid whom */}
         <div className="flex items-center justify-center gap-3">
           <span className="relative inline-flex">

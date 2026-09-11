@@ -115,7 +115,7 @@ export function QuickAddForm({ groupId }: { groupId: string }) {
       })
 
   return (
-    <div className="mx-auto flex min-h-[calc(100dvh-4rem)] w-full max-w-md flex-col px-4">
+    <div className="mx-auto flex w-full max-w-md flex-col px-4 pb-6">
       {/* Top bar */}
       <div className="flex items-center justify-between py-3">
         <Button asChild variant="ghost" size="icon" aria-label="Cancel">
@@ -136,7 +136,7 @@ export function QuickAddForm({ groupId }: { groupId: string }) {
       </div>
 
       {/* The two fields */}
-      <div className="flex flex-1 flex-col justify-center gap-8 py-10">
+      <div className="flex flex-col gap-8 py-6">
         <label className="flex items-end gap-4">
           <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-md border border-foreground/60">
             <FileText className="h-7 w-7" />

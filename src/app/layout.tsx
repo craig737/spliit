@@ -117,19 +117,25 @@ function Content({ children }: { children: React.ReactNode }) {
         </Link>
         <div role="navigation" aria-label="Menu" className="flex">
           <ul className="flex items-center text-sm">
-            <li>
-              <Button
-                variant="ghost"
-                size="sm"
-                asChild
-                className="-my-3 text-primary"
-              >
-                <Link href={groups}>{t('Header.groups')}</Link>
-              </Button>
-            </li>
-            <li>
-              <LocaleSwitcher />
-            </li>
+            {/* IHA fork: a single-group instance has nowhere else to go and
+                one language, so only the theme toggle remains. */}
+            {!env.SINGLE_GROUP_ID && (
+              <>
+                <li>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    asChild
+                    className="-my-3 text-primary"
+                  >
+                    <Link href={groups}>{t('Header.groups')}</Link>
+                  </Button>
+                </li>
+                <li>
+                  <LocaleSwitcher />
+                </li>
+              </>
+            )}
             <li>
               <ThemeToggle />
             </li>
