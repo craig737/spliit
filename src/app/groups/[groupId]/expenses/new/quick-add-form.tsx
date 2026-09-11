@@ -29,7 +29,8 @@ export function QuickAddForm({ groupId }: { groupId: string }) {
   const utils = trpc.useUtils()
   const { data } = trpc.groups.get.useQuery({ groupId })
   const group = data?.group
-  const activeUserId = useActiveUser(groupId)
+  const storedUser = useActiveUser(groupId)
+  const activeUserId = storedUser && storedUser !== 'None' ? storedUser : null
   const { mutateAsync: createExpense, isPending } =
     trpc.groups.expenses.create.useMutation()
 

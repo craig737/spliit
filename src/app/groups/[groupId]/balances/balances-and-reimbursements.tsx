@@ -2,6 +2,7 @@
 
 import { BalancesList } from '@/app/groups/[groupId]/balances-list'
 import { ReimbursementList } from '@/app/groups/[groupId]/reimbursement-list'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -11,9 +12,12 @@ import {
 } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { TrackPage } from '@/lib/analytics/track-page'
+import { useActiveUser } from '@/lib/hooks'
 import { getCurrencyFromGroup } from '@/lib/utils'
 import { trpc } from '@/trpc/client'
+import { HandCoins } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import Link from 'next/link'
 import { Fragment, useEffect } from 'react'
 import { match } from 'ts-pattern'
 import { useCurrentGroup } from '../current-group-context'
@@ -26,6 +30,8 @@ export default function BalancesAndReimbursements() {
       groupId,
     })
   const t = useTranslations('Balances')
+  const storedUser = useActiveUser(groupId)
+  const activeUserId = storedUser && storedUser !== 'None' ? storedUser : null
 
   useEffect(() => {
     // Until we use tRPC more widely and can invalidate the cache on expense
@@ -35,13 +41,32 @@ export default function BalancesAndReimbursements() {
 
   const isLoading = balancesAreLoading || !balancesData || !group
 
+  // IHA fork: "Settle up" opens the record-a-payment sheet. If this device's
+  // user has exactly one suggested payment to make, pre-fill it.
+  const mine =
+    balancesData?.reimbursements.filter((r) => r.from === activeUserId) ?? []
+  const settleHref =
+    mine.length === 1
+      ? `/groups/${groupId}/expenses/settle?from=${mine[0].from}&to=${mine[0].to}&amount=${mine[0].amount}`
+      : `/groups/${groupId}/expenses/settle${
+          activeUserId ? `?from=${activeUserId}` : ''
+        }`
+
   return (
     <>
       <TrackPage path={`/groups/${groupId}/balances`} />
       <Card className="mb-4">
-        <CardHeader>
-          <CardTitle>{t('title')}</CardTitle>
-          <CardDescription>{t('description')}</CardDescription>
+        <CardHeader className="flex flex-row items-start justify-between gap-4 space-y-0">
+          <div className="space-y-1.5">
+            <CardTitle>{t('title')}</CardTitle>
+            <CardDescription>{t('description')}</CardDescription>
+          </div>
+          <Button asChild className="shrink-0">
+            <Link href={settleHref}>
+              <HandCoins className="mr-2 h-4 w-4" />
+              Settle up
+            </Link>
+          </Button>
         </CardHeader>
         <CardContent>
           {isLoading ? (
