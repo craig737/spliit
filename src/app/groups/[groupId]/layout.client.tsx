@@ -17,7 +17,7 @@ export function GroupLayoutClient({
   const t = useTranslations('Groups.NotFound')
   const { toast } = useToast()
   // IHA fork: the quick-add sheet stands on its own, without the group header.
-  const header = usePathname().endsWith('/expenses/new') ? null : (
+  const header = /\/expenses\/(new|settle)$/.test(usePathname()) ? null : (
     <GroupHeader />
   )
 
