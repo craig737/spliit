@@ -40,14 +40,14 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(effectiveBaseUrl),
     title: {
       default: t('metaTitle'),
-      template: '%s · Spliit',
+      template: '%s · IHA Split',
     },
     description:
-      'Spliit is a minimalist web application to share expenses with friends and family. No ads, no account, no problem.',
+      'Shared expenses for the International Hockey Association — ice time, road trips and post-game rounds, settled without the awkward math.',
     openGraph: {
       title: t('metaTitle'),
       description:
-        'Spliit is a minimalist web application to share expenses with friends and family. No ads, no account, no problem.',
+        'Shared expenses for the International Hockey Association — ice time, road trips and post-game rounds, settled without the awkward math.',
       images: `/banner.png`,
       type: 'website',
       url: '/',
@@ -59,7 +59,7 @@ export async function generateMetadata(): Promise<Metadata> {
       images: `/banner.png`,
       title: t('metaTitle'),
       description:
-        'Spliit is a minimalist web application to share expenses with friends and family. No ads, no account, no problem.',
+        'Shared expenses for the International Hockey Association — ice time, road trips and post-game rounds, settled without the awkward math.',
     },
     appleWebApp: {
       capable: true,

@@ -1,11 +1,11 @@
 {
   "Homepage": {
-    "title": "Share <strong>Expenses</strong> with <strong>Friends & Family</strong>",
-    "metaTitle": "Spliit · Share Expenses with Friends & Family",
-    "description": "Welcome to your new <strong>Spliit</strong> instance !",
+    "title": "Split the <strong>Bill</strong>, Not the <strong>Team</strong>",
+    "metaTitle": "IHA Split · Shared Expenses for the International Hockey Association",
+    "description": "Ice time, road trips and post-game rounds — tracked between players, coaches and friends, and settled without the awkward math.",
     "button": {
-      "groups": "Go to groups",
-      "github": "GitHub"
+      "groups": "Your groups",
+      "github": "IHA home"
     }
   },
   "Header": {
