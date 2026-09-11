@@ -40,7 +40,7 @@ export default function GroupExpensesPageClient({
             {enableReceiptExtract && <CreateFromReceiptButton />}
             <Button asChild size="icon">
               <Link
-                href={`/groups/${groupId}/expenses/create`}
+                href={`/groups/${groupId}/expenses/new`}
                 title={t('create')}
               >
                 <Plus className="w-4 h-4" />

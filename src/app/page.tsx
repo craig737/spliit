@@ -1,13 +1,20 @@
 import { Button } from '@/components/ui/button'
 // lucide-react v1 dropped its brand icons, so the GitHub mark comes from Radix.
 import { TrackPage } from '@/lib/analytics/track-page'
+import { env } from '@/lib/env'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
 // FIX for https://github.com/vercel/next.js/issues/58615
 // export const dynamic = 'force-dynamic'
 
 export default function HomePage() {
+  if (env.SINGLE_GROUP_ID) redirect(`/groups/${env.SINGLE_GROUP_ID}`)
+  return <Landing />
+}
+
+function Landing() {
   const t = useTranslations()
   return (
     <main>

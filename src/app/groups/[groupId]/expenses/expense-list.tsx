@@ -155,7 +155,7 @@ const ExpenseListForSearch = ({
       <p className="px-6 text-sm py-6">
         {t('noExpenses')}{' '}
         <Button variant="link" asChild className="-m-4">
-          <Link href={`/groups/${groupId}/expenses/create`}>
+          <Link href={`/groups/${groupId}/expenses/new`}>
             {t('createFirst')}
           </Link>
         </Button>

@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Toaster } from '@/components/ui/toaster'
 import { Analytics } from '@/lib/analytics/analytics'
 import { getAnalyticsConfig } from '@/lib/analytics/config'
-import { effectiveBaseUrl } from '@/lib/env'
+import { effectiveBaseUrl, env } from '@/lib/env'
 import { TRPCProvider } from '@/trpc/client'
 import type { Metadata, Viewport } from 'next'
 import { NextIntlClientProvider, useTranslations } from 'next-intl'
@@ -87,12 +87,16 @@ export const viewport: Viewport = {
 
 function Content({ children }: { children: React.ReactNode }) {
   const t = useTranslations()
+  const home = env.SINGLE_GROUP_ID ? `/groups/${env.SINGLE_GROUP_ID}` : '/'
+  const groups = env.SINGLE_GROUP_ID
+    ? `/groups/${env.SINGLE_GROUP_ID}`
+    : '/groups'
   return (
     <TRPCProvider>
       <header className="fixed top-0 left-0 right-0 h-16 flex justify-between bg-background/70 p-2 border-b backdrop-blur-sm z-50">
         <Link
           className="flex items-center gap-3 px-2 hover:text-primary transition-colors"
-          href="/"
+          href={home}
         >
           <Image
             src="/logo/64x64.png"
@@ -120,7 +124,7 @@ function Content({ children }: { children: React.ReactNode }) {
                 asChild
                 className="-my-3 text-primary"
               >
-                <Link href="/groups">{t('Header.groups')}</Link>
+                <Link href={groups}>{t('Header.groups')}</Link>
               </Button>
             </li>
             <li>

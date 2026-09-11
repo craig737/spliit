@@ -55,6 +55,12 @@ const envSchema = z
       z.string().trim().optional(),
     ),
     NEXT_PUBLIC_DEFAULT_CURRENCY_CODE: z.string().optional(),
+    // IHA fork: when this instance serves a single group, send the home page
+    // and header links straight to it instead of the group list.
+    SINGLE_GROUP_ID: z.preprocess(
+      interpretBlankEnvVarAsUndefined,
+      z.string().trim().optional(),
+    ),
     S3_UPLOAD_KEY: z.string().optional(),
     S3_UPLOAD_SECRET: z.string().optional(),
     S3_UPLOAD_BUCKET: z.string().optional(),
