@@ -163,10 +163,10 @@ export async function GET(
 
   // Create an ASCII-safe version of the group name for the 'filename' parameter
   const asciiSafeGroupName = group.name.replace(/[^\x00-\x7F]/g, '_') // Replace non-ASCII with underscore
-  const asciiFilename = `Spliit Export - ${asciiSafeGroupName} - ${date}.csv`
+  const asciiFilename = `IHA Split Export - ${asciiSafeGroupName} - ${date}.csv`
 
   // Use the original group name for the 'filename*' parameter (UTF-8 encoded)
-  const fullFilename = `Spliit Export - ${group.name} - ${date}.csv`
+  const fullFilename = `IHA Split Export - ${group.name} - ${date}.csv`
   const encodedFullFilename = encodeURIComponent(fullFilename)
 
   // \uFEFF character is added at the beginning of the CSV content to ensure that it is interpreted as UTF-8 with BOM (Byte Order Mark), which helps some applications correctly interpret the encoding.
