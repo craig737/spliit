@@ -5,12 +5,13 @@
 // purpose so upstream changes to expense-form.tsx never conflict with it.
 import { Button } from '@/components/ui/button'
 import { useActiveUser } from '@/lib/hooks'
+import { randomId } from '@/lib/random'
 import { ExpenseFormValues } from '@/lib/schemas'
 import { amountAsMinorUnits, cn, getCurrencyFromGroup } from '@/lib/utils'
 import { trpc } from '@/trpc/client'
-import { CalendarDays, Check, FileText, X } from 'lucide-react'
+import { CalendarDays, Check, FileText, Paperclip, X } from 'lucide-react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 
 function todayForInput() {
@@ -26,6 +27,7 @@ function dateFromInput(value: string) {
 
 export function QuickAddForm({ groupId }: { groupId: string }) {
   const router = useRouter()
+  const params = useSearchParams()
   const utils = trpc.useUtils()
   const { data } = trpc.groups.get.useQuery({ groupId })
   const group = data?.group
@@ -34,9 +36,23 @@ export function QuickAddForm({ groupId }: { groupId: string }) {
   const { mutateAsync: createExpense, isPending } =
     trpc.groups.expenses.create.useMutation()
 
-  const [title, setTitle] = useState('')
-  const [amount, setAmount] = useState('')
-  const [date, setDate] = useState(todayForInput)
+  // Pre-fill from the receipt scanner (same query params the full form reads).
+  const scanned = {
+    title: params.get('title') ?? '',
+    amount: params.get('amount') ?? '',
+    date: /^\d{4}-\d{2}-\d{2}$/.test(params.get('date') ?? '')
+      ? (params.get('date') as string)
+      : '',
+    categoryId: Number(params.get('categoryId')) || 0,
+    imageUrl: params.get('imageUrl') ?? '',
+    imageWidth: Number(params.get('imageWidth')) || 0,
+    imageHeight: Number(params.get('imageHeight')) || 0,
+  }
+  const [title, setTitle] = useState(scanned.title)
+  const [amount, setAmount] = useState(
+    Number(scanned.amount) > 0 ? scanned.amount : '',
+  )
+  const [date, setDate] = useState(scanned.date || todayForInput())
   const [paidBy, setPaidBy] = useState<string>('')
   const [excluded, setExcluded] = useState<Set<string>>(new Set())
   const [error, setError] = useState<string | null>(null)
@@ -79,7 +95,7 @@ export function QuickAddForm({ groupId }: { groupId: string }) {
     const values: ExpenseFormValues = {
       expenseDate: dateFromInput(date),
       title: title.trim(),
-      category: 0,
+      category: scanned.categoryId,
       amount: amountAsMinorUnits(amountNumber, currency),
       originalCurrency: '',
       paidBy,
@@ -88,7 +104,17 @@ export function QuickAddForm({ groupId }: { groupId: string }) {
       splitMode: 'EVENLY',
       saveDefaultSplittingOptions: false,
       isReimbursement: false,
-      documents: [],
+      documents:
+        scanned.imageUrl && scanned.imageWidth && scanned.imageHeight
+          ? [
+              {
+                id: randomId(),
+                url: scanned.imageUrl,
+                width: scanned.imageWidth,
+                height: scanned.imageHeight,
+              },
+            ]
+          : [],
       recurrenceRule: 'NONE',
     }
     try {
@@ -164,6 +190,13 @@ export function QuickAddForm({ groupId }: { groupId: string }) {
             className="w-full border-0 border-b border-foreground/50 bg-transparent pb-1 text-5xl font-light tabular-nums placeholder:text-muted-foreground focus:border-primary focus:outline-none"
           />
         </label>
+
+        {scanned.imageUrl && (
+          <p className="-mt-4 flex items-center justify-center gap-2 text-sm text-muted-foreground">
+            <Paperclip className="h-4 w-4 text-primary" />
+            Receipt attached — check the amount before saving
+          </p>
+        )}
 
         {/* Paid by … and split equally */}
         <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-3 text-center text-lg">

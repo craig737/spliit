@@ -260,7 +260,7 @@ function ReceiptDialogContent() {
               `/groups/${groupId}/expenses`,
             )
             router.push(
-              `/groups/${group.id}/expenses/create?amount=${
+              `/groups/${group.id}/expenses/new?amount=${
                 receiptInfo.amount
               }&categoryId=${receiptInfo.categoryId}&date=${
                 receiptInfo.date
